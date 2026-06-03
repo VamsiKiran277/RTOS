@@ -25,6 +25,8 @@
 //Function Declarations
 void Hardware_init();
 void TaskA(void);
+void TaskB(void);
 extern void OS_Yield(void);
+extern void PendSV_Handler(void);
 
 #endif

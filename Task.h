@@ -17,6 +17,11 @@ extern TCB_t TCB_LIST[TOTAL_TASKS];
 extern uint32_t TASKA_STACK[STACK_SIZE];
 extern uint32_t TASKB_STACK[STACK_SIZE];
 
+//sp that assembly can access them using .extern
+extern TCB_t* current_tcb;
+extern TCB_t* next_tcb;
+
+
 
 //initialization function with accepting address from a task and a pointer to the base of the stack array
 uint32_t* TCB_Initialization(void(*task)(void),uint32_t*stack_arr);  

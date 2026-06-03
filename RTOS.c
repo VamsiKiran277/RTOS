@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "hardware/sync.h"
+#include "hardware/irq.h"
 #include "RTOS.h"
 #include "Task.h"
+
+volatile uint32_t TASKA_COUNTER = 0;
+volatile uint32_t TASKB_COUNTER = 0;
 
 void Hardware_init() {
     //CLEAR RESET bit for IO_BANK0
@@ -20,21 +25,44 @@ void TaskA(void) {
     while(1) {
         //toggle
         *SIO_GPIO_OUT_XOR = PIN_OUT_SET;
-        for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
+       // for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
+       TASKA_COUNTER++;
+       //switch hand control to TASK B
+       OS_Yield();
     }
 }
+
+void TaskB(void) {
+    while(1) {
+        TASKB_COUNTER++;
+        //just counting for now
+        //switch control to TASK A
+        OS_Yield();
+    }
+}
+
 int main() {
     Hardware_init(); //initializing the Hardware
+
     //Passing the function name and global array and then capture topofstack ptr
     TCB_LIST[0].topStackPtr = TCB_Initialization(TaskA,TASKA_STACK);
-    //TCB_LIST[1].topStackPtr = TCB_Initialization(TaskB,TASKB_STACK); //YET TO IMPLEMENT TASK B
+    TCB_LIST[1].topStackPtr = TCB_Initialization(TaskB,TASKB_STACK);
+    
+//    irq_set_exclusive_handler(14, PendSV_Handler);
+    //point HARDWARE PSP register to initialzed taskA  stack pointer
+    __asm volatile("MSR psp, %0" : : "r" (TCB_LIST[0].topStackPtr) : "r0");
+    //update the cpu control register to shift from MSP to PSP tracking
+    __asm volatile(
+        "MOVS r0, #2\n"
+        "MSR control, r0\n"
+        : : : "r0"
+    );
+    //Force Synchronization
+    __asm volatile("ISB" : : : "memory");
+    //contect switch
+    OS_Yield();
 
-    //right now calling taskA to check register math later it will be replace by TCB initialization
-//    TaskA();  Turned it off for now to check TCB
-    //absolute_time_t start_time = get_absolute_time(); //get start time
-    //absolute_time_t target_time = delayed_by_ms(start_time,1000);
     while(1) {
         //unreachable once RTOS is live
     }
-
 }

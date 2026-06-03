@@ -38,6 +38,7 @@ pico_sdk_init()
 add_executable(RTOS 
     RTOS.c 
     Task.c
+    os_asm.S
 )
 
 pico_set_program_name(RTOS "RTOS")

@@ -23,10 +23,6 @@ void Hardware_init() {
     volatile uint8_t *shpr3 = (volatile uint8_t *)(0xE000ED22);
     *shpr3 = 0xC0; // Set to lowest priority level
     
-    //FORCE NVIC TO ENABLE EXCEPTION 14 (PendSV)
-    volatile uint32_t *nvic_iser = (volatile uint32_t *)(0xE000E100);
-    *nvic_iser |= (1U << 14);
-    
 }
 void TaskA(void) {
     while(1) {
@@ -55,7 +51,7 @@ int main() {
     TCB_LIST[0].topStackPtr = TCB_Initialization(TaskA,TASKA_STACK);
     TCB_LIST[1].topStackPtr = TCB_Initialization(TaskB,TASKB_STACK);
     
-//    irq_set_exclusive_handler(14, PendSV_Handler);
+
     //point HARDWARE PSP register to initialzed taskA  stack pointer
     __asm volatile("MSR psp, %0" : : "r" (TCB_LIST[0].topStackPtr) : "r0");
     //update the cpu control register to shift from MSP to PSP tracking
@@ -69,7 +65,8 @@ int main() {
 
     __asm volatile("CPSIE i" : : : "memory"); // Clears PRIMASK globally
     //contect switch
-    OS_Yield();
+   // OS_Yield();
+   TaskA(); //testing
 
     while(1) {
         //unreachable once RTOS is live

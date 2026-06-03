@@ -14,7 +14,7 @@ uint32_t* TCB_Initialization(void(*task)(void),uint32_t*stack_arr) {
     // --- Hardware Stack Frame (Popped automatically by CPU on exception return) ---
     topOfStack[-1] = 0x01000000; //standard as per ARM rules (xPSR with Thumb bit set)
     topOfStack[-2] = (uint32_t)task; //address of next task function (PC)
-    topOfStack[-3] = 0x11111111; // Link register (LR)
+    topOfStack[-3] = 0xFFFFFFFD; // Link register (LR)
     topOfStack[-4] = 0x22222222; //R12
     topOfStack[-5] = 0x33333333; //R3
     topOfStack[-6] = 0x44444444; //R2

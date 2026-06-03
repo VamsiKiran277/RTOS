@@ -30,7 +30,7 @@ void TaskA(void) {
         *SIO_GPIO_OUT_XOR = PIN_OUT_SET;
        // for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
        TASKA_COUNTER++;
-       //switch hand control to TASK B
+       //switch control to TASK B
        OS_Yield();
     }
 }
@@ -64,7 +64,7 @@ int main() {
     __asm volatile("ISB" : : : "memory");
 
     __asm volatile("CPSIE i" : : : "memory"); // Clears PRIMASK globally
-    //contect switch
+    //context switch
    // OS_Yield();
    TaskA(); //testing
 

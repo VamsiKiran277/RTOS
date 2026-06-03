@@ -25,5 +25,6 @@
 //Function Declarations
 void Hardware_init();
 void TaskA(void);
+extern void OS_Yield(void);
 
 #endif

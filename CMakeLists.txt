@@ -34,8 +34,11 @@ project(RTOS C CXX ASM)
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
-
-add_executable(RTOS RTOS.c )
+# Added Task.c here so the compiler processes your TCB/stack management routines
+add_executable(RTOS 
+    RTOS.c 
+    Task.c
+)
 
 pico_set_program_name(RTOS "RTOS")
 pico_set_program_version(RTOS "0.1")
@@ -54,4 +57,3 @@ target_include_directories(RTOS PRIVATE
 )
 
 pico_add_extra_outputs(RTOS)
-

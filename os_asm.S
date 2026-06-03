@@ -13,15 +13,10 @@ OS_Yield:
     ISB                @Instuction synchronization barrier
     BX LR               @Return to C code
 
-.global PendSV_Handler
-.global isr_pendsv         @ Export the SDK's expected vector name
-.thumb_func
-
-.global isr_pendsv      @ Expose the exact name the Pico SDK vector table is expecting
+.global isr_pendsv
 .type isr_pendsv, %function
 .thumb_func
-
-isr_pendsv:            @ The hardware will now jump straight here on PendSV
+isr_pendsv:            @ Point the SDK vector label directly into our handler code
     .extern current_tcb @Address of Current TCB (from Task.h)
     .extern next_tcb    @Address of next TCB (from Task.h)
     

@@ -19,6 +19,13 @@ void Hardware_init() {
     *GPIO25_CNTL = GPIO25_FUNCSEL;
     //OUTPUT set for pin 25
     *SIO_GPIO_OUTPUT_SET = PIN_OUT_SET;
+    //testing below for taskA  force PENDSV to the lowest
+    volatile uint8_t *shpr3 = (volatile uint8_t *)(0xE000ED22);
+    *shpr3 = 0xC0; // Set to lowest priority level
+    
+    //FORCE NVIC TO ENABLE EXCEPTION 14 (PendSV)
+    volatile uint32_t *nvic_iser = (volatile uint32_t *)(0xE000E100);
+    *nvic_iser |= (1U << 14);
     
 }
 void TaskA(void) {
@@ -59,6 +66,8 @@ int main() {
     );
     //Force Synchronization
     __asm volatile("ISB" : : : "memory");
+
+    __asm volatile("CPSIE i" : : : "memory"); // Clears PRIMASK globally
     //contect switch
     OS_Yield();
 

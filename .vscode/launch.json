@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Pico Remote Debug (Pi 4)",
+      "cwd": "${workspaceRoot}",
+      "executable": "${command:raspberry-pi-pico.launchTargetPath}",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "external",
+
+      // Your remote Pi 4 IP address over Tailscale
+      "gdbTarget": "100.111.183.102:3333",
+
+      // Let the extension find GDB and the hardware registers automatically
+      "gdbPath": "${command:raspberry-pi-pico.getGDBPath}",
+      "device": "${command:raspberry-pi-pico.getChipUppercase}",
+      "svdFile": "${userHome}/.pico-sdk/sdk/2.2.0/src/${command:raspberry-pi-pico.getChip}/hardware_regs/${command:raspberry-pi-pico.getChipUppercase}.svd",
+
+      "runToEntryPoint": "main",
+
+      // Send standard load and reset commands to the remote Pi 4 OpenOCD
+      "overrideLaunchCommands": [
+        "monitor reset init",
+        "load \"${command:raspberry-pi-pico.launchTargetPath}\""
+      ]
+    }
+  ]
+}

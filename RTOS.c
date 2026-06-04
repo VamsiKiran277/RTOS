@@ -24,6 +24,17 @@ void Hardware_init() {
     *shpr3 = 0xC0; // Set to lowest priority level
     
 }
+//Reload value = (Clock Cycle*desired_value)-1 //clock cycle is 16MHZ and desired value is 1ms(0.001)
+
+void SysTick(void) {
+    SysTick_config->SYST_RVR = ((Frequency/1000)-1);
+    SysTick_config->SYST_CVR = 0;
+    SysTick_config->SYST_CSR = 0x07; //enable,Interrupt and processor clock
+}
+void isr_systick(void) {
+    *PENDSVSET_ICSR = PENDSVSET;
+}
+
 void TaskA(void) {
     while(1) {
         //toggle
@@ -31,7 +42,7 @@ void TaskA(void) {
        // for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
        TASKA_COUNTER++;
        //switch control to TASK B
-       OS_Yield();
+//       OS_Yield(); //Removing For now to test SysTick
     }
 }
 
@@ -40,12 +51,13 @@ void TaskB(void) {
         TASKB_COUNTER++;
         //just counting for now
         //switch control to TASK A
-        OS_Yield();
+//        OS_Yield();  //removing for now to test SysTick
     }
 }
 
 int main() {
     Hardware_init(); //initializing the Hardware
+
 
     //Passing the function name and global array and then capture topofstack ptr
     TCB_LIST[0].topStackPtr = TCB_Initialization(TaskA,TASKA_STACK);
@@ -62,6 +74,8 @@ int main() {
     );
     //Force Synchronization
     __asm volatile("ISB" : : : "memory");
+
+    SysTick();
 
     __asm volatile("CPSIE i" : : : "memory"); // Clears PRIMASK globally
     //context switch

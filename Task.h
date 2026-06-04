@@ -17,7 +17,7 @@ extern TCB_t TCB_LIST[TOTAL_TASKS];
 extern uint32_t TASKA_STACK[STACK_SIZE];
 extern uint32_t TASKB_STACK[STACK_SIZE];
 
-//sp that assembly can access them using .extern
+//so that assembly can access them using .extern
 extern TCB_t* current_tcb;
 extern TCB_t* next_tcb;
 

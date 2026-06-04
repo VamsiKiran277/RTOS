@@ -38,7 +38,7 @@ void isr_systick(void) {
 void TaskA(void) {
     while(1) {
         //toggle
-        *SIO_GPIO_OUT_XOR = PIN_OUT_SET;
+        *SIO_GPIO_OUT_XOR = PIN_OUT_SET;  //automatically does the xor
        // for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
        TASKA_COUNTER++;
        //switch control to TASK B

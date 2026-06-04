@@ -3,8 +3,8 @@
 
 //Macros definitons
 #define RESET_BASE_ADDRESS  0x4000c000
-#define IO_BANK0_BASE   0x40014000
-#define SIO_BASE        0xd0000000
+#define RTOS_IO_BANK0_BASE   0x40014000
+#define RTOS_SIO_BASE        0xd0000000
 #define SYSTICK_BASE    0xE000E010
 #define ICSR_BASE       0xE000ED04
 //OFFSETS
@@ -16,9 +16,9 @@
 //definitions
 #define RESET_RESET   ((volatile unsigned int*)(RESET_BASE_ADDRESS + RESET_OFFSET))
 #define RESET_DONE    ((volatile unsigned int*)(RESET_BASE_ADDRESS + RESET_RESET_DONE))
-#define GPIO25_CNTL   ((volatile unsigned int*)(IO_BANK0_BASE + PIN25_CNTL))
-#define SIO_GPIO_OUTPUT_SET ((volatile unsigned int*)(SIO_BASE + GPIO_OE_SET))
-#define SIO_GPIO_OUT_XOR ((volatile unsigned int*)(SIO_BASE + GPIO_OUT_XOR))
+#define GPIO25_CNTL   ((volatile unsigned int*)(RTOS_IO_BANK0_BASE + PIN25_CNTL))
+#define SIO_GPIO_OUTPUT_SET ((volatile unsigned int*)(RTOS_SIO_BASE + GPIO_OE_SET))
+#define SIO_GPIO_OUT_XOR ((volatile unsigned int*)(RTOS_SIO_BASE + GPIO_OUT_XOR))
 #define SysTick_config        ((SysTick_t*)SYSTICK_BASE)
 #define PENDSVSET_ICSR ((volatile unsigned int*)(ICSR_BASE))
 

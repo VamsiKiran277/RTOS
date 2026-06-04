@@ -43,12 +43,12 @@ isr_pendsv:            @ Point the SDK vector label directly into our handler co
     STR R0,[R1]         @Stack pointer back into current tasks TCB structure
     
     //updating TCB pointers (Scheduling logic)
-    LDR R1,=current_tcb
-    LDR R2,[R1]
-    LDR R3,=next_tcb
-    LDR R4,[R3]
-    STR R4,[R1]
-    STR R2,[R3]
+    LDR R1,=current_tcb @loads physical mem address of current_tcb into R1 
+    LDR R2,[R1]         @Reads the value inside current_tcb
+    LDR R3,=next_tcb    @loads physical mem address of next_tcb into R3
+    LDR R4,[R3]         @Reads the next_tcb variable value into R4
+    STR R4,[R1]         @Writing TaskB's address into current_tcb (Task b is now officially active task)
+    STR R2,[R3]         @writes TaskA tcb address into R3 which is next_tcb
     
     //Restore next tasks context
     LDR R0,[R4]         @R0 is the current_tcb pointer variable

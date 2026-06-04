@@ -42,7 +42,7 @@ void TaskA(void) {
        // for(volatile int i = 0; i < 500000; i++); //temporary delay until assembly switch works
        TASKA_COUNTER++;
        //switch control to TASK B
-//       OS_Yield(); //Removing For now to test SysTick
+//       OS_Yield(); //Removing For now to test SysTick Handler
     }
 }
 
@@ -51,7 +51,7 @@ void TaskB(void) {
         TASKB_COUNTER++;
         //just counting for now
         //switch control to TASK A
-//        OS_Yield();  //removing for now to test SysTick
+//        OS_Yield();  //removing for now to test SysTick Handler
     }
 }
 

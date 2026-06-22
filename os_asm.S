@@ -26,7 +26,7 @@ isr_pendsv:            @ Point the SDK vector label directly into our handler co
     // Decrement by 16 bytes to safely store high registers first
     SUBS R0,#16          
     MOV R4,R8           @READ R8 into R4
-    MOV R5,R9           @REAN R5 into R9
+    MOV R5,R9           @READ R5 into R9
     MOV R6,R10          @READ R6 into R10
     MOV R7,R11          @READ R7 into R11
     STMIA R0!, {R4-R7}  @PUSH R4-R7(R8-R11) on to the stack
